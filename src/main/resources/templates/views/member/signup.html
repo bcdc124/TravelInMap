@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="author" content="templatemo">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <title>여행 in 지도</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> 
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="/assets/css/templatemo-snapx-photography.css">
+    <link rel="stylesheet" href="/assets/css/owl.css">
+    <link rel="stylesheet" href="/assets/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--
+
+TemplateMo 576 SnapX Photography
+
+https://templatemo.com/tm-576-snapx-photography
+
+-->
+<style type="text/css">
+/* 폼을 화면 정중앙에 맞추기 */
+    .user_register {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 10%);
+        width: 30%; /* 폼 너비 조절 */
+    }
+
+    /* 반응형 스타일링 */
+    @media screen and (max-width: 768px) {
+        .user_register {
+            width: 90%; /* 모바일 화면에서 폼 너비 조절 */
+        }
+    }
+    input{
+    	margin-bottom: 10px;
+    }
+    
+    input[type="date"]{
+    	 padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            width: 100%;
+    }
+</style>
+  </head>
+
+<body>
+
+        <!-- 회원가입 폼 -->
+        <div class="user_register" style="display: block;">
+		<h1><a href="/member/index">여행 in 지도</a> </h1>
+		    <form id="signupForm" action="/member/signup" method="post">
+		        <label><span style="color: red;">*</span> 이름</label>
+		        <input name="mName" type="text" id="username" />
+		        <div class="error-message" style="color: red;"></div>
+		
+		        <label><span style="color: red;">*</span>이메일</label>
+		        <input name="mEmail" type="email" id="email" />
+		        <div class="error-message" style="color: red;"></div>
+		        <button type="button" class="btn btn_red" id="verifyEmail" >인증 받기</button>
+		        <div id="emailError" style="color: red;"></div>
+				
+				<div id="verificationCodeGroup" style="display: none;">
+			    <label><span style="color: red;">*</span>인증 번호</label>
+			    <div class="error-message" style="color: red;"></div>
+			    <input type="text" id="verificationCode"/>
+			    <button type="button" id="verifyCodeButton" class="btn btn_red">인증 확인</button>
+				</div>
+				
+		        <label><span style="color: red;">*</span>비밀번호</label>
+		        <input name="mPw" type="password" id="password" placeholder="8~12자 영문 대 소문자, 숫자, 특수문자 조합"/>
+		        <div class="error-message" style="color: red;"></div>
+		        <div class="password-error" style="color: red;"></div>
+		        <label><span style="color: red;">*</span>비밀번호 확인</label>
+		        <input type="password" id="confirmPassword" />
+		        <div class="error-message" style="color: red;"></div>
+		        <div class="confirm-password-error" style="color: red;"></div>
+		
+		        <div class="checkbox">
+		            <label><span style="color: red;">*</span>성별</label>
+		            <input name="mGender" id="gender" type="radio" value="m"/> 남자
+		            <input name="mGender" id="gender" type="radio" value="w"/> 여자
+		            <input name="mGender" id="gender" type="radio" value="N"/> 선택안함
+		            <div class="error-message" style="color: red;"></div>
+		        </div>
+		
+		      	<label><span style="color: red;">*</span>생년월일</label>
+		        <input name="mBirth" type="date" id="m_birth">
+		        <div class="error-message" style="color: red;"></div>
+		
+		        <label>닉네임</label>
+		        <input name="mNick" type="text" id="m_nick">
+		
+		        <div class="action_btns">
+		            <div class="one_half last"><button type="submit" class="btn btn_red" id="submitButton">가입하기</button></div>
+		        </div>
+		    </form>
+		</div>
+        
+
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Copyright © 2048 <a href="#">SnapX</a> Photo Contest Co., Ltd. All rights reserved. 
+          
+          Design: <a title="CSS Templates" rel="sponsored" href="https://templatemo.com/page/1" target="_blank">TemplateMo</a> Distribution: <a title="CSS Templatesss" rel="sponsored" href="https://themewagon.com" target="_blank">ThemeWagon</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="/assets/js/isotope.min.js"></script>
+  <script src="/assets/js/owl-carousel.js"></script>
+
+  <script src="/assets/js/tabs.js"></script>
+  <script src="/assets/js/popup.js"></script>
+  <script src="/assets/js/custom.js"></script>
+  <script>
+  
+  	var emailError = true;
+  	var passwordError = true;
+  	var confirmPassError = true;
+  	
+    $(document).ready(function () {
+    	
+    	// 이메일 유효성 함수
+    	function mailFormCheck(email){
+    		   var form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    		   return form.test(email);
+	    	}
+    	
+    	// 이메일 인증
+    	var enteredCode = $("#verificationCode").val();
+    	 $("#verifyEmail").click(function () {
+    	        var email = $("#email").val();
+				
+    	        // 이메일 입력 확인
+    	        if (email === "") {
+    	            $("#emailError").text("이메일을 입력해주세요.");
+    	            $("#email").focus(); // 이메일 입력 필드로 커서 이동
+    	            return; // 함수 종료
+    	        } else if(!mailFormCheck(email)){
+    	        	alert('유효하지 않은 이메일 입니다.');
+    	        }
+
+    	        $.post("/member/checkEmail", {mEmail: email}, function (data) {
+    	            if (data === "duplicate_email") {
+    	                $("#emailError").text("이미 사용 중인 이메일입니다.");
+    	            } else if(mailFormCheck(email) && data === "") {
+    	                // 이메일 중복 체크에 성공했을 때, 인증 번호 입력 칸을 보여줌
+    	                $("#emailError").empty();
+    	                $("#verificationCodeGroup").show(); // 인증 번호 입력 칸을 보여줌
+    	                $("#verificationCode").focus(); // 인증 번호 입력 필드로 커서 이동
+    	                // 서버에 인증번호 요청
+    	                $.post("/member/sendEmailVerification", { mEmail: email }, function(data) {
+    	                    if (data !== "fail") {
+    	                        console.log(data);
+    	                        alert("인증번호가 전송되었습니다.");
+    	                        
+    	                        // 인증번호 확인
+    	                        $('#verifyCodeButton').on('click', function() {
+    	                            console.log('전송된 인증 번호: ' + data);
+    	                            var enteredCode = $("#verificationCode").val().trim();
+    	                            console.log('입력 번호: ' + enteredCode);
+    	                            if (enteredCode === data) {
+    	                                alert('인증되었습니다.');
+    	                                emailError = false;
+    	                            } else {
+    	                                alert('인증번호가 올바르지 않습니다.');
+    	                                e.preventDefault();
+    	                            }
+    	                        });
+    	                        
+    	                    } else {
+    	                        alert("인증번호 전송에 실패했습니다.");
+    	                        console.log(email);
+    	                    }
+    	                });
+    	            }
+    	        });
+    	    });
+    	// 이메일 인증
+    	
+    	// 비밀번호 체크 함수
+    	function isPasswordValid(password) {
+	      // 8~12자 영문 대 소문자, 숫자, 특수문자 조합 정규식
+	      var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+	      return passwordRegex.test(password);
+    	}
+    	// 비밀번호 체크 함수
+    	
+    	// 비밀번호 입력 칸에서 벗어날 때 유효성 체크
+	    $("#password").blur(function() {
+	    	
+	      var password = $(this).val().trim();
+	      
+	      if (!isPasswordValid(password)) {
+	        // 유효하지 않은 비밀번호 형식인 경우
+	        $(".password-error").text("8~12자 영문 대 소문자, 숫자, 특수문자 조합이어야 합니다.");
+	      } else {
+	        // 유효한 비밀번호인 경우
+	        $(".password-error").empty();
+	        passwordError = false;
+	      }
+	    });
+    	
+    	// 비밀번호 확인 체크
+    	$("#confirmPassword").blur(function(){
+    		var confirmPass = $(this).val().trim();
+    		var password = $('#password').val().trim();
+    		if(confirmPass != password){
+    			$('.confirm-password-error').text('비밀번호가 일치하지 않습니다.');
+    		}else {
+    			$('.confirm-password-error').empty();
+    			confirmPassError = false;
+    		}
+    	})
+        
+    	
+    	// 폼 제출시 전체 유효성 체크
+    	 $("#signupForm").on("submit", function(e) {
+    		 
+    	        $(".error-message").text("");
+
+    	        var isFormValid = true;
+				
+	    	        if ($("#username").val().trim() === "") {
+	    	            $("#username").next(".error-message").text("필수항목입니다");
+	    	            isFormValid = false;
+	    	        }
+
+    	        if ($("#email").val().trim() === "") {
+    	            $("#email").next(".error-message").text("필수항목입니다");
+    	            isFormValid = false;
+    	        }
+
+    	        if ($("#verificationCode").val().trim() === "") {
+    	        	alert('이메일 인증이 필요합니다.');
+    	            isFormValid = false;
+    	        } else if(emailError === true){
+    	        	alert('인증번호가 올바르지 않습니다.')
+    	        	isFormValid = false;
+    	        }
+
+    	        if ($("#password").val().trim() === "") {
+    	            $("#password").next(".error-message").text("필수항목입니다");
+    	            isFormValid = false;
+    	        } else if(passwordError === true){
+    	        	$('.password-error').text('유효하지 않은 비밀번호입니다.');
+    	        	isFormValid = false;
+    	        }
+
+    	        if ($("#confirmPassword").val().trim() === "") {
+    	            $("#confirmPassword").next(".error-message").text("필수항목입니다");
+    	            isFormValid = false;
+    	        } else if(confirmPassError === true){
+    	        	$('.confirm-password-error').text('비밀번호가 일치하지 않습니다.');
+    	        	isFormValid = false;
+    	        }
+
+    	        if ($("#gender:checked").length === 0) {
+    	            $("#gender").siblings(".error-message").text("필수항목입니다");
+    	            isFormValid = false;
+    	        }
+
+    	        /* var birthInput = $("#m_birth").val().trim();
+    	        var validDateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    	        if (birthInput !== "" && !validDateRegex.test(birthInput)) {
+    	            // Show an error message for invalid date format
+    	            $("#m_birth").next(".error-message").text("올바른 날짜 형식으로 입력해주세요. (yyyy-mm-dd)");
+    	            isFormValid = false;
+    	        }  */
+
+    	        console.log("isFormValid: " + isFormValid); // isFormValid 값 확인
+    	        // console.log("birthInput: " + birthInput); // birthInput 값 확인
+    	        // console.log("validDateRegex.test(birthInput): " + validDateRegex.test(birthInput)); // validDateRegex 테스트 결과 확인
+				
+    	        
+    	        
+    	        if (!isFormValid) {
+    	            e.preventDefault(); // Prevent form submission
+    	        }
+    	        
+    	    });
+    	// 폼 제출시 전체 유효성 체크
+    });
+</script>
+  </body>
+</html>
