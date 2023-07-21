@@ -45,12 +45,23 @@
 	    <artifactId>spring-boot-starter-thymeleaf</artifactId>
 	</dependency>
 	
-	
+	<!-- Thymeleaf layout -->
+    <dependency>
+       <groupId>nz.net.ultraq.thymeleaf</groupId>
+       <artifactId>thymeleaf-layout-dialect</artifactId>
+    </dependency>
+    
 	<!-- Spring Boot Starter Mail -->
 	<dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
+
+	<!-- log -->
+	<dependency>
+       <groupId>ch.qos.logback</groupId>
+       <artifactId>logback-classic</artifactId>
+   	</dependency>
 
 	
 	<!-- 외부 라이브러리 추가 -->
