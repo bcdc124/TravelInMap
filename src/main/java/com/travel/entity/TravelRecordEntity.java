@@ -28,18 +28,36 @@ public class TravelRecordEntity {
 	 @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동증가 
 	 @Column(name = "t_num") // 데이터베이스 컬럼명과 매핑
 	 private long tNum;
-     private String t_title;
-  	 private int m_num;
+	 
+	 @Column(name = "t_title")
+     private String tTitle;
+	 
+	 @Column(name = "m_num")
+  	 private int mNum;
+	 
+	 @Column(name = " t_postDate")
  	 private LocalDateTime t_postDate;
- 	 private int t_view;
-     private int t_great;
+	 
+	 @Column(name = "t_view")
+ 	 private int tView;
+	 
+	 @Column(name = "t_great")
+     private int tGreat;
      private String t_content;
-     private String t_tag;
+     
+     @Column(name= "t_tag")
+     private String tTag;
      private int t_personnel;
      private char t_save;
-     private LocalDate t_startDay;
-     private LocalDate t_endDay; 
-     private String t_theme;
+     
+     @Column(name = "t_startDay")
+     private LocalDate tStartDay;
+     
+     @Column(name = "t_endDay")
+     private LocalDate tEndDay;
+     
+     @Column(name = "t_theme")
+     private String tTheme;
 	 
      @Builder
      public TravelRecordEntity(long t_num, String t_title, int m_num, LocalDateTime t_postDate, int t_view,
@@ -47,34 +65,34 @@ public class TravelRecordEntity {
              LocalDate t_startDay, LocalDate t_endDay, String t_theme) {
   
     	 this.tNum = t_num;
-         this.t_title = t_title;
-         this.m_num = m_num;
+         this.tTitle = t_title;
+         this.mNum = m_num;
          this.t_postDate = t_postDate;
-         this.t_view = t_view;
-         this.t_great = t_great;
+         this.tView = t_view;
+         this.tGreat = t_great;
          this.t_content = t_content;
-         this.t_tag = t_tag;
+         this.tTag = t_tag;
          this.t_personnel = t_personnel;
          this.t_save = t_save;
-         this.t_startDay = t_startDay; // t_startDay에 기본값으로 현재 날짜 설정 (t_startDay != null) ? t_startDay : LocalDate.now()
-         this.t_endDay = t_endDay;
-         this.t_theme = t_theme;
+         this.tStartDay = t_startDay; // t_startDay에 기본값으로 현재 날짜 설정 (t_startDay != null) ? t_startDay : LocalDate.now()
+         this.tEndDay = t_endDay;
+         this.tTheme = t_theme;
      }
 	    
 	    // 게시글 수정
 	    public void update(long t_num,String t_title,int m_num,LocalDateTime t_postDate,String t_content, String t_tag, int t_personnel, char t_save, 
 	    					LocalDate t_startDay, LocalDate t_endDay, String t_theme) {
 			this.tNum = t_num;
-	    	this.t_title = t_title;
-	    	this.m_num = m_num;
+	    	this.tTitle = t_title;
+	    	this.mNum = m_num;
 	    	this.t_postDate = t_postDate;
 			this.t_content = t_content;
-			this.t_tag = t_tag;
+			this.tTag = t_tag;
 			this.t_personnel = t_personnel;
 			this.t_save = t_save;
-			this.t_startDay = t_startDay;
-			this.t_endDay = t_endDay;
-			this.t_theme = t_theme;
+			this.tStartDay = t_startDay;
+			this.tEndDay = t_endDay;
+			this.tTheme = t_theme;
 	    }
 	    
 	    public Long getT_num() {
