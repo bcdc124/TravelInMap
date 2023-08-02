@@ -98,4 +98,9 @@ public class TravelRecordEntity {
 	    public Long getT_num() {
 	        return tNum;
 	    }
+	    
+	    // 조회수증가
+	    public void increaseView() {
+	    	this.tView++;
+	    }
 }
