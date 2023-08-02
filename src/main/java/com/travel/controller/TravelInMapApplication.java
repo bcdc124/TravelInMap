@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @ComponentScan("com.travel")
 @EntityScan(basePackages = "com.travel.entity")
-@EnableJpaRepositories(basePackages = "com.travel.persistence")
+@EnableJpaRepositories(basePackages = "com.travel.entity")
 public class TravelInMapApplication {
 
 	public static void main(String[] args) {
