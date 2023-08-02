@@ -1,7 +1,5 @@
 package com.travel.entity;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,20 +10,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Builder.Default;
 import lombok.Data;
 
 
 /**
  * 일정 테이블	tim_schedule
- * 일정글번호	s_num
- * 제목		s_title
- * 회원번호	m_num
- * 등록일		s_regdate
- * 스크랩수	s_count
- * 조회수		s_view
- * 공개/비공개	s_status
+ * 일정글번호	sNum
+ * 제목		sTitle
+ * 회원번호	mNum
+ * 등록일		sRegdate
+ * 스크랩수	sCount
+ * 조회수		sView
+ * 공개/비공개	sStatus
  * 
  * @author bcdc124
  *
@@ -39,25 +40,25 @@ public class Schedule {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "s_num")
-	private Integer s_num;
+	private Integer sNum;
 	
 	@Column(name = "s_title", length = 30, nullable = false)
-	private String s_title;
+	private String sTitle;
 	
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "m_num", nullable = false)
-	private TimMember member;
+	private Member mNum;
 	
-	@Column(name = "s_regdate", nullable = false)
-	private Timestamp s_regdate;
+	@Column(name = "s_regdate", nullable = true)
+	private String sRegdate;
 	
 	@Column(name = "s_count", nullable = false)
-	private int s_count;
+	private int sCount;
 	
 	@Column(name = "s_view", nullable = false)
-	private int s_view;
+	private int sView;
 	
 	@Column(name = "s_status", length = 1, nullable = false)
-	private String s_status;
+	private String sStatus;
 
 }
