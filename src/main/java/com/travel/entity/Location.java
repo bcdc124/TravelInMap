@@ -15,15 +15,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 /**
- * 장소번호	l_num
- * 일차 		l_days
- * 순번		l_seq
- * 장소명		l_name
- * 주소		l_addr
- * 위도		l_lat
- * 경도		l_lon
- * 일정글번호	s_num
- * 장소ID		l_id
+ * 장소번호	lNum
+ * 일차 		lDays
+ * 순번		lSeq
+ * 장소명		lName
+ * 주소		lAddr
+ * 위도		lLat
+ * 경도		lLon
+ * 일정글번호	sNum
+ * 장소ID		lId
  * 
  * @author bcdc124
  *
@@ -37,30 +37,30 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "l_num")
-    private Integer l_num;
+    private Integer lNum;
 
     @Column(name = "l_days", nullable = false)
-    private int l_days;
+    private int lDays;
 
     @Column(name = "l_seq", nullable = false)
-    private int l_seq;
+    private int lSeq;
 
     @Column(name = "l_name", length = 100, nullable = false)
-    private String l_name;
+    private String lName;
 
     @Column(name = "l_addr", length = 100, nullable = false)
-    private String l_addr;
+    private String lAddr;
 
     @Column(name = "l_lat")
-    private Double l_lat;
+    private Double lLat;
 
     @Column(name = "l_lon")
-    private Double l_lon;
+    private Double lLon;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "s_num", nullable = false)
-    private Schedule schedule;
+    private Schedule sNum;
 
     @Column(name = "l_id", length = 100, nullable = false)
-    private String l_id;
+    private String lId;
 }
