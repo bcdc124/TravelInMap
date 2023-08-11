@@ -1,6 +1,5 @@
 package com.travel.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.travel.entity.TravelRecordEntity;
@@ -19,8 +18,8 @@ public class TravelRecordResponseDTO {
     private String t_tag;
     private int t_personnel;
     private char t_save;
-    private LocalDate t_startDay;
-    private LocalDate t_endDay;
+    private String t_startDay;
+    private String t_endDay;
     private String t_theme;
 
     public TravelRecordResponseDTO (TravelRecordEntity entity) {

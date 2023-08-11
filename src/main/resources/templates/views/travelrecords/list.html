@@ -70,7 +70,7 @@ https://templatemo.com/tm-576-snapx-photography
 <!-- JavaScript 파일 -->
 
 <script>
-  function listAll() {
+function listAll() {
     fetch('/api/travelrecords')
       .then(response => response.json())
       .then(data => {
@@ -80,25 +80,28 @@ https://templatemo.com/tm-576-snapx-photography
           html = '<div class="col-md-12">등록된 게시글이 없습니다.</div>';
         } else {
           data.forEach((obj, idx) => {
+            let thumbnailUrl = obj.t_content.match(/src="([^"]*)/);
+            let thumbnailImage = thumbnailUrl ? thumbnailUrl[1] : '../assets/images/default-thumbnail.png';
+
             html += `
               <div class="col-lg-3 col-sm-6">
                 <div class="popular-item">
-                <a href="javascript: void(0);" onclick="goView(${obj.t_num})"> <div class="top-content">
-                    <div class="icon">
-                      <img src="../assets/images/icon-01.png" alt="">
+                  <a href="javascript: void(0);" onclick="goView(${obj.t_num})">
+                    <div class="top-content">
+                      <div class="icon">
+                        <img src=""  alt="">
+                      </div>
+                      <div class="right">
+                        <h4>${obj.t_title}</h4>
+                        <span><em>${obj.t_view}</em> ${obj.m_num}</span>
+                      </div>
                     </div>
-                    <div class="right">
-                      <h4>${obj.t_title}</h4>
-                      <span><em>${obj.t_view}</em> ${obj.m_num}</span>
+                    <div class="thumb">
+                      <img src="${thumbnailImage}" alt=""  style="width: 288.5px; height: 133.91px;">
+                      <span class="category">Top Contest</span>
+                      <span class="likes"><i class="fa fa-heart"></i> ${obj.t_view}</span>
                     </div>
-                  </div>
-                  <div class="thumb">
-                    <img src="../assets/images/popular-01.png" alt="">
-                    <span class="category">Top Contest</span>
-                    <span class="likes"><i class="fa fa-heart"></i> ${obj.t_view}</span>
-                  </div>
-                    </a>
-                  </div>
+                  </a>
                 </div>
               </div>
             `;
@@ -115,8 +118,8 @@ https://templatemo.com/tm-576-snapx-photography
   };
   
   function goView(t_num) {
-	  	location.href = `/travelrecords/${t_num}`;
-	  }
+    location.href = `/travelrecords/${t_num}`;
+  }
 </script>
 </th:block>
    

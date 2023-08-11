@@ -31,8 +31,6 @@ public class TravelRecordController {
 	@GetMapping("/posts")
 	public String write(@RequestParam(required = false)final Long t_num, Model model) throws Exception {
 		model.addAttribute("t_num",t_num);
-		TravelRecordRequestDTO trDTO = new TravelRecordRequestDTO();
-		logger.info(trDTO+"@@@@@@@@@@@@@@@");
 		return "travelrecords/posts";
 	}
 	
@@ -40,7 +38,6 @@ public class TravelRecordController {
 	@GetMapping("/{t_num}")
 	public String view(@PathVariable final Long t_num, Model model) throws Exception {
 		model.addAttribute("t_num", t_num);
-		
 		return "travelrecords/view";
 	}
 

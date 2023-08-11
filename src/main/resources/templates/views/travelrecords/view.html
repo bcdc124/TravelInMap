@@ -70,9 +70,10 @@
         </div>
         <div class="col-lg-12">
         
-          <div class="main-content" id="t_content" th:utext="${t_content}" >
-           내용
-          </div>
+         <div class="main-content" id="t_content" th:utext="${t_content}">
+		  썸머노트에 작성한 내용이 여기에 출력됩니다.
+		</div>
+
            
            <hr>
             <div id="t_tag" >
@@ -114,14 +115,16 @@
 	      }
 	      return response.json();
 	    })
-	    .then(json => { // Object.keys() 객체에 담겨있는 모든 프로퍼티 Key값 배열 리턴
-	       Object.keys(json).forEach(key => { 
+	    .then(json => {
+	      // 이 부분을 수정합니다.
+	      Object.keys(json).forEach(key => {
 	        const elem = document.getElementById(key);
 	        if (elem) {
-	          elem.innerText = json[key];
+	          // elem.innerText = json[key]; // 기존 코드
+	          elem.innerHTML = json[key]; // 수정된 코드
 	        }
-	      }); 
-	      
+	      });
+
 	    })
 	    .catch(error => {
 	      alert('게시글 정보를 찾을 수 없습니다.');
