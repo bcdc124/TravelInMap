@@ -27,6 +27,8 @@ import lombok.Data;
  * 스크랩수	sCount
  * 조회수		sView
  * 공개/비공개	sStatus
+ * 여행 시작일	sStart
+ * 여행 종료일	sEnd
  * 
  * @author bcdc124
  *
@@ -60,5 +62,11 @@ public class Schedule {
 	
 	@Column(name = "s_status", length = 1, nullable = false)
 	private String sStatus;
+	
+	@Column(name = "s_start", nullable = false)
+	private String sStart;
+	
+	@Column(name = "s_end", nullable = false)
+	private String sEnd;
 
 }

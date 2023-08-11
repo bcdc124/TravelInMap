@@ -29,7 +29,7 @@ import lombok.Data;
  *
  */
 @Data
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name="tim_location")
 @Entity
 public class Location {

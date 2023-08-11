@@ -4,7 +4,7 @@
 	  layout:decorate="~{layout/default_layout}">
 
 <th:block layout:fragment="content">
-	  
+
 <!-- 지오로케이션 -->
 <script type="text/javascript">
   var userLat = '';
@@ -122,6 +122,7 @@ function initMap() {
     place_data = new Object();
     place_data.lName = place.name;
     place_data.lId = place.place_id;
+    place_data.lAddr = place.formatted_address;
     
     infowindow.open(map, marker);
     
@@ -384,12 +385,17 @@ window.initMap = initMap;
   <!-- 일정 목록 컨테이너 -->
   <!-- 버튼 -->
   <div class="row">
-    <!-- <div id="${schedule == null ? createPrivate : updatePrivate}" class="border-button col-lg-3" style="text-align: left;"> -->
-    <div id="createPrivate" class="border-button col-lg-3" style="text-align: left;">
+    <div th:if="${schedule == null}" id="createPrivate" class="border-button col-lg-3" style="text-align: left;">
+      <a href="javascript:;">임시저장 [비공개]</a>
+    </div>
+    <div th:if="${schedule != null}" id="updatePrivate" class="border-button col-lg-3" style="text-align: left;">
       <a href="javascript:;">임시저장 [비공개]</a>
     </div>
     <div class="col-lg-6"></div>
-    <div id="${schedule == null ? 'createSchedule' : 'updateSchedule'}" class="main-button col-lg-3" style="text-align: right;">
+    <div th:if="${schedule == null}" id="createSchedule" class="main-button col-lg-3" style="text-align: right;">
+      <a href="javascript:;">저장 [공개]</a>                    
+    </div>
+    <div th:if="${schedule != null}" id="updateSchedule" class="main-button col-lg-3" style="text-align: right;">
       <a href="javascript:;">저장 [공개]</a>                    
     </div>
   </div>
@@ -498,86 +504,86 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 일정 컨테이너 출력
 function printSchedules() {
-  container.innerHTML = '';
+	container.innerHTML = '';
   
-  for(var i=0; i<schedules.length; i++) {
-    // 날짜 계산
-    const date = new Date(startDateInput.value); // 시작일
-    date.setDate(date.getDate() + i);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const dateString = `${year}-${month}-${day}`;
-
-    // 날짜 컨테이너 출력
-    const newContent = document.createElement('div');
-    newContent.className = i == schedules.length-1 ? 'col-lg-4 selected_day' : 'col-lg-4 schedule_day';
-    newContent.id = i;
-    newContent.style.margin = '10px';
-    newContent.addEventListener('click', function() {
-      const tmp = document.getElementsByClassName("selected_day")[0];
-      if(tmp != undefined) tmp.className = 'col-lg-4 schedule_day';
-      this.className = 'col-lg-4 selected_day';
-      selectedDay = this.id;
-    });
-
-    const newHeading = document.createElement('b');
-    newHeading.textContent = "Day "+(i+1)+" "+dateString;
-    const newHr = document.createElement('hr');
-    
-    container.appendChild(newContent);
-    newContent.appendChild(newHeading);
-    if(schedules.length > 1) {
-      const btnDel = document.createElement('i');
-      btnDel.className = "fas fa-trash";
-      btnDel.addEventListener('click', function() {
-        if(confirm("여행일정("+this.parentElement.firstChild.textContent.split(" ")[2]+")을 삭제 하시겠습니까?")) {
-          let id = this.parentElement.id;
-          schedules = schedules.filter((element, index) => index != id);
-
-          const date = new Date(endDateInput.value);
-          date.setDate(date.getDate() - 1);
-          
-          const year = date.getFullYear();
-          const month = String(date.getMonth() + 1).padStart(2, '0');
-          const day = String(date.getDate()).padStart(2, '0');
-          
-          endDateInput.value = `${year}-${month}-${day}`;
-          startDateInput.max = endDateInput.value;
-          prevEndValue = endDateInput.value;
-          printSchedules();
-        }
-      });
-      newContent.appendChild(btnDel);
-    }
-    newContent.appendChild(newHr);
-    // 날짜 컨테이너 출력
-
-    // 장소 출력
-    for(var j=0; j<schedules[i].length; j++) {
-      const newH6 = document.createElement('h6');
-      newH6.textContent = (j+1)+" "+schedules[i][j].lName;
-      newH6.id = schedules[i][j].lId;
-      // 장소 삭제
-      const btnDel = document.createElement('i');
-      btnDel.className = "fas fa-trash";
-      btnDel.addEventListener('click', function() {
-        
-          let i = this.parentElement.parentElement.id;
-          let id = --this.parentElement.textContent.split(" ")[0];
-          schedules[i] = schedules[i].filter((element, index) => index != id);
-
-          printSchedules();
-      });
-      newH6.appendChild(btnDel);
-      
-      newContent.appendChild(newH6);
-    }
-    // 장소 출력
-  }
-  
-  // default selected
-  selectedDay = schedules.length-1;
+	for(var i=0; i<schedules.length; i++) {
+	  // 날짜 계산
+	  const date = new Date(startDateInput.value); // 시작일
+	  date.setDate(date.getDate() + i);
+	  const year = date.getFullYear();
+	  const month = String(date.getMonth() + 1).padStart(2, '0');
+	  const day = String(date.getDate()).padStart(2, '0');
+	  const dateString = `${year}-${month}-${day}`;
+	
+	  // 날짜 컨테이너 출력
+	  const newContent = document.createElement('div');
+	  newContent.className = i == schedules.length-1 ? 'col-lg-4 selected_day' : 'col-lg-4 schedule_day';
+	  newContent.id = i;
+	  newContent.style.margin = '10px';
+	  newContent.addEventListener('click', function() {
+	    const tmp = document.getElementsByClassName("selected_day")[0];
+	    if(tmp != undefined) tmp.className = 'col-lg-4 schedule_day';
+	    this.className = 'col-lg-4 selected_day';
+	    selectedDay = this.id;
+	  });
+	
+	  const newHeading = document.createElement('b');
+	  newHeading.textContent = "Day "+(i+1)+" "+dateString;
+	  const newHr = document.createElement('hr');
+	  
+	  container.appendChild(newContent);
+	  newContent.appendChild(newHeading);
+	  if(schedules.length > 1) {
+	    const btnDel = document.createElement('i');
+	    btnDel.className = "fas fa-trash";
+	    btnDel.addEventListener('click', function() {
+	      if(confirm("여행일정("+this.parentElement.firstChild.textContent.split(" ")[2]+")을 삭제 하시겠습니까?")) {
+	        let id = this.parentElement.id;
+	        schedules = schedules.filter((element, index) => index != id);
+	
+	        const date = new Date(endDateInput.value);
+	        date.setDate(date.getDate() - 1);
+	        
+	        const year = date.getFullYear();
+	        const month = String(date.getMonth() + 1).padStart(2, '0');
+	        const day = String(date.getDate()).padStart(2, '0');
+	        
+	        endDateInput.value = `${year}-${month}-${day}`;
+	        startDateInput.max = endDateInput.value;
+	        prevEndValue = endDateInput.value;
+	        printSchedules();
+	      }
+	    });
+	    newContent.appendChild(btnDel);
+	  }
+	  newContent.appendChild(newHr);
+	  // 날짜 컨테이너 출력
+	
+	  // 장소 출력
+	  for(var j=0; j<schedules[i].length; j++) {
+	    const newH6 = document.createElement('h6');
+	    newH6.textContent = (j+1)+" "+schedules[i][j].lName;
+	    newH6.id = schedules[i][j].lId;
+	    // 장소 삭제
+	    const btnDel = document.createElement('i');
+	    btnDel.className = "fas fa-trash";
+	    btnDel.addEventListener('click', function() {
+	      
+	        let i = this.parentElement.parentElement.id;
+	        let id = --this.parentElement.textContent.split(" ")[0];
+	        schedules[i] = schedules[i].filter((element, index) => index != id);
+	
+	        printSchedules();
+	    });
+	    newH6.appendChild(btnDel);
+	    
+	    newContent.appendChild(newH6);
+	  }
+	  // 장소 출력
+	}
+	
+	// default selected
+	selectedDay = schedules.length-1;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -627,95 +633,114 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </script>
 <!-- 일정 추가 및 삭제 -->
-  
+
+<script src="/vendor/jquery/jquery.min.js"></script>
 <!-- CRUD -->
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+//create
+function createSchedule(sStatus) {
+  $.ajax({
+    url: '/schedules',
+    method: 'POST',
+    contentType: 'application/json',
+    dataType: "json",
+    data: JSON.stringify({sTitle: document.getElementById('sTitle').value, mNum : [[${mNum}]], sStatus : sStatus, sStart : startDateInput.value, sEnd : endDateInput.value, placeData : JSON.stringify(schedules)}),
+    success: function (response) {
+      console.log("응답 내용:", response);
+    },
+    error: function (xhr, status, error) {
+      console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
+    }
+  });
+}
+//create
+
+//read
+function getSchedule(sNum) {
+  $.ajax({
+    url: '/schedules/'+sNum,
+    method: 'GET',
+    contentType: 'application/json',
+    success: function (response) {
+      console.log("응답 내용:", response);
+      document.getElementById('sTitle').value = response.schedule.stitle;
+      startDateInput.value = response.schedule.sstart.split(' ')[0];
+      endDateInput.value = response.schedule.send.split(' ')[0];
+      schedules = new Array();
+      var n = dateCount(startDateInput.value, endDateInput.value);
+      while(n-- > 0) schedules.push(new Array());
+      for(var i=0; i<response.location.length; i++) {
+      	place_data = new Object();
+          place_data.lName = response.location[i].lname;
+          place_data.lId = response.location[i].lid;
+          place_data.lAddr = response.location[i].laddr;
+          schedules[response.location[i].ldays].push(place_data);
+      }
+
+      printSchedules();
+    },
+    error: function (xhr, status, error) {
+      console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
+    }
+  });
+}
+//read
+
+//update
+function updateSchedule(sStatus) {
+	var sNum = [[${schedule}]];
+	if(sNum != null) sNum = sNum.snum;
+	$.ajax({
+	  url: '/schedules/'+sNum,
+	  method: 'PUT',
+	  contentType: 'application/json',
+	  dataType: "json",
+	  data: JSON.stringify({sTitle: document.getElementById('sTitle').value, mNum : [[${mNum}]], sStatus : sStatus, sStart : startDateInput.value, sEnd : endDateInput.value, placeData : JSON.stringify(schedules)}),
+	  success: function (response) {
+	    console.log("응답 내용:", response);
+	  },
+	  error: function (xhr, status, error) {
+	    console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
+	  }
+	});
+}
+//update
+
 $(document).ready(function() {
-  //create
-  $("#createPrivate").click(function() {
-    $.ajax({
-      url: '/schedules',
-      method: 'POST',
-      contentType: 'application/json',
-      dataType: "json",
-      data: JSON.stringify({sTitle: document.getElementById('sTitle').value, mNum : '1', sStatus : 'n', sStart : startDateInput.value, sEnd : endDateInput.value, placeData : schedules}),
-      success: function (response) {
-        console.log("응답 내용:", response);
-      },
-      error: function (xhr, status, error) {
-        console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
-      }
-    });
-  });
-  
-  $("#createSchedule").click(function() {
-    $.ajax({
-      url: '/schedules',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(schedules),
-      success: function (response) {
-        console.log("응답 내용:", response);
-      },
-      error: function (xhr, status, error) {
-        console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
-      }
-    });
-  });
-  //create
+	//create
+	$("#createPrivate").click( function() {createSchedule('n');} );
+	$("#createSchedule").click( function() {createSchedule('y');} );
+	//create
+	
+	//update
+	$("#updatePrivate").click( function() {updateSchedule('n');} );
+	$("#updateSchedule").click( function() {updateSchedule('y');} );
+	//update
+	    
+	//read
+	var sNum = [[${schedule}]];
+	if(sNum != null) getSchedule(sNum.snum);
+	//read
       
-  //read
-  $("#getSchedule").click(function() {
-    $.ajax({
-      url: '/schedules/'+sNum,
-      method: 'GET',
-      contentType: 'application/json',
-      success: function (response) {
-        console.log("응답 내용:", response);
-      },
-      error: function (xhr, status, error) {
-        console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
-      }
-    });
-  });
-  //read
-  
-  //update
-  $("#updateSchedule").click(function() {
-    $.ajax({
-      url: '/schedules/'+sNum,
-      method: 'PUT',
-      contentType: 'application/json',
-      data: JSON.stringify(schedules),
-      success: function (response) {
-        console.log("응답 내용:", response);
-      },
-      error: function (xhr, status, error) {
-        console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
-      }
-    });
-  });
-  //update
-      
-  //delete
-  $("#deleteSchedule").click(function() {
-    $.ajax({
-      url: '/schedules/'+sNum,
-      method: 'DELETE',
-      contentType: 'application/json',
-      success: function (response) {
-          console.log("응답 내용:", response);
-      },
-      error: function (xhr, status, error) {
-          console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
-      }
-    });
-  });
-  //delete
+	//delete
+	$("#deleteSchedule").click(function() {
+	  $.ajax({
+	    url: '/schedules/'+sNum,
+	    method: 'DELETE',
+	    contentType: 'application/json',
+	    success: function (response) {
+	        console.log("응답 내용:", response);
+	        location.href = '/schedule/list';
+	    },
+	    error: function (xhr, status, error) {
+	        console.error("POST 요청이 실패하였습니다. 상태 코드:", xhr.status);
+	    }
+	  });
+	});
+	//delete
 });
 </script>
-<!-- CRUD -->
-	  
+  
 </th:block>
 </html>
 
