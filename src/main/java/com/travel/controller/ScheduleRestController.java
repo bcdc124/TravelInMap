@@ -1,9 +1,12 @@
 package com.travel.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,34 +42,39 @@ public class ScheduleRestController {
     }
 
     //read one
-    @GetMapping("/{id}")
-    public Schedule getScheduleById(@PathVariable Integer id) {
-        return scheduleRepository.findById(id).orElse(null);
+    @GetMapping("/{sNum}")
+    public ResponseEntity<Map<String, Object>> getScheduleById(@PathVariable Integer sNum) throws Exception {
+    	Map<String, Object> map = new HashMap<>();
+    	Schedule schedule = scheduleRepository.findById(sNum).orElse(null);
+    	map.put("schedule", schedule);
+    	map.put("location", locationService.getLocastionList(schedule));
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     //create
     @PostMapping
-    public String createSchedule(@RequestBody Map<String,Object> map) throws Exception {
-    	scheduleService.createSchedule(map);
-    	locationService.createLocation(map);
-    	return "?";
+    public ResponseEntity<String> createSchedule(@RequestBody Map<String,Object> map) throws Exception {
+    	locationService.createLocation(map, scheduleService.createSchedule(map));
+    	return new ResponseEntity<>("요청 성공하고 디비 인서트 되고 코드200 뜨는데 왜 에이잭스는 실패 뜨는지 모르겠네", HttpStatus.CREATED);
     }
 
     //update
-    @PutMapping("/{id}")
-    public Schedule updateSchedule(@PathVariable Integer id, @RequestBody Schedule updatedSchedule) {
-        Schedule schedule = scheduleRepository.findById(id).orElse(null);
-        if (schedule != null) {
-            schedule.setSTitle(updatedSchedule.getSTitle());
-
-            return scheduleRepository.save(schedule);
-        }
+    @PutMapping("/{sNum}")
+    public ResponseEntity<Map<String, Object>> updateSchedule(@PathVariable Integer sNum, @RequestBody Map<String,Object> map) throws Exception {
+    	Map<String, Object> respMap = new HashMap<>();
+    	Schedule schedule = scheduleService.updateSchedule(sNum, map);
+    	if(schedule != null) {
+    		respMap.put("schedule", schedule);
+    		locationService.updateLocation(map, schedule);
+    		respMap.put("location", locationService.getLocastionList(schedule));
+    		return new ResponseEntity<>(map, HttpStatus.OK);
+    	}
         return null;
     }
 
     //delete
-    @DeleteMapping("/{id}")
-    public void deleteSchedule(@PathVariable Integer id) {
-        scheduleRepository.deleteById(id);
+    @DeleteMapping("/{sNum}")
+    public void deleteSchedule(@PathVariable Integer sNum) {
+        scheduleRepository.deleteById(sNum);
     }
 }
