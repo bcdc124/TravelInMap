@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="mypageFragment">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	
+	<div class="page-heading" style="background-image: url(/img/기본배경.png)">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2 header-text">
+          <h2> </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+	<div class="user-info">
+    <div class="container">
+      <div class="row">
+	<div class="col-lg-12">
+          <div class="avatar">
+            <form id="profile-form" enctype="multipart/form-data">
+	   	      <input type="file" id="profile-img-upload" name="mProfile" style="display: none;">
+		    </form>
+		    
+            <img th:if="${member.mProfile != null}" th:src="@{/img/__${member.mProfile}__}" alt="프로필 사진">
+			<img th:unless="${member.mProfile != null}" src="/img/기본프사.png" alt="프로필 사진">
+            <br>
+ 			<button onclick="openFileUpload()">프로필 수정</button>
+            <h4 style="margin-top: 10px;"> <span th:text="${member.mNick == null ? member.mName : member.mNick}"></span></h4>
+          </div>
+        </div>
+        
+        
+       <!-- Additional Menus -->
+		<div class="col-lg-12">
+		  <ul class="menu nav nav-pills justify-content-center mt-4">
+		    <li class="nav-item">
+		      <a class="nav-link" href="/member/myPage">여행기</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" href="/member/schedule">여행 일정</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" href="/member/wishList">위시리스트</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" href="/member/point">포인트</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" href="/member/userInfo">회원정보</a>
+		    </li>
+		  </ul>
+		</div>  
+		
+		</div>
+		</div>
+		</div>
+<script>
+
+function openFileUpload() {
+	  // 파일 업로드 input 엘리먼트를 클릭하는 함수 호출
+	  document.getElementById('profile-img-upload').click();
+	}
+	
+	$(function() {
+	  $('#profile-img-upload').change(function() {
+	    var formData = new FormData($('#profile-form')[0]);
+	    $.ajax({
+	      url: '/member/profileImg', // 서버로 업로드할 URL
+	      type: 'POST', // POST 방식으로 전송
+	      data: formData, // 업로드할 데이터
+	      processData: false,
+	      contentType: false,
+	      success: function(response) {
+	        alert('프로필 사진 변경 !!');
+	        console.log(response);
+	        setTimeout(function(){
+	        	location.reload();
+	        }, 50);
+	      },
+	      error: function(xhr, status, error) {
+	        alert('실패');
+	        console.log(xhr.responseText);
+	      }
+	    });
+	  });
+	});
+	
+	$(document).ready(function() {
+	  var currentPath = window.location.pathname;
+	  
+	  $('.nav-link').each(function() {
+	    var href = $(this).attr('href');
+	    
+	    if (href === currentPath) {
+	      $(this).addClass('active');
+	    }
+	  });
+	});
+</script>
+</th:block>
+</html>

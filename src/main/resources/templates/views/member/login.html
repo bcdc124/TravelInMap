@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="author" content="templatemo">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <title>여행 in 지도</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> 
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="/assets/css/templatemo-snapx-photography.css">
+    <link rel="stylesheet" href="/assets/css/owl.css">
+    <link rel="stylesheet" href="/assets/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--
+
+TemplateMo 576 SnapX Photography
+
+https://templatemo.com/tm-576-snapx-photography
+
+-->
+<style type="text/css">
+.user_login {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 30%);
+        width: 30%; /* 폼 너비 조절 */
+        min-height: 600px;
+    }
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .user_login form input[type="email"],
+    .user_login form input[type="password"] {
+        font-size: 14px;
+    }
+}
+
+/* 모달 스타일 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+}
+
+.close {
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 추가적인 스타일은 필요에 따라 구현 */
+
+
+</style>
+
+  </head>
+
+<body>
+
+      <!-- Username & Password Login form -->
+        <div class="user_login" style="display: block;">
+        <h1><a href="/member/index">여행 in 지도</a> </h1>
+            <form action="/member/login" method="post" id="login-form" onsubmit="return checkForm()">
+                <label>이메일</label>
+                <input name="mEmail" type="email" id="username" placeholder="이메일을 입력하세요."/>
+              <br />
+
+                <label>비밀번호</label>
+                <input name="mPw" type="password" id="password" placeholder="비밀번호를 입력하세요."/>
+              <br />
+
+                <!-- <div class="checkbox">
+                    <input id="remember" type="checkbox" />
+                    <label for="remember">자동 로그인</label>
+                </div> -->
+				<div class="find">
+					<a href="#" id="findEmailBtn">이메일 찾기</a>
+					<a href="#" id="findPwBtn">비밀번호 찾기</a>	
+				</div>
+                <div class="action_btns">
+                    
+                    <div class="one_half last"><button type="submit" class="btn btn_red">로그인</button></div>
+                    <div class="one_half last"><button type="button" class="btn btn_red" id="signup-btn">회원가입</button></div>
+                </div>
+            </form>
+            <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=61a3c6e603acd05dea0ad8967fef6f1c&redirect_uri=http://localhost:8080/member/kakao">
+		     <img alt="카카오 로그인" src="/img/kakao.png" style="height: 50px; width: 100%; margin: 10px 0;">	
+            </a>
+            <div id="naver_id_login"></div>
+        </div>
+
+        
+
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Copyright © 2048 <a href="#">SnapX</a> Photo Contest Co., Ltd. All rights reserved. 
+          
+          Design: <a title="CSS Templates" rel="sponsored" href="https://templatemo.com/page/1" target="_blank">TemplateMo</a> Distribution: <a title="CSS Templatesss" rel="sponsored" href="https://themewagon.com" target="_blank">ThemeWagon</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+	<!-- 모달 창 -->
+<div class="modal" id="emailModal">
+  <div class="modal-content">
+    <!-- 모달 내용을 추가할 수 있습니다. -->
+    <h2>이메일 찾기</h2>
+    <form action="/member/findEmail" method="post" id="findEmailForm">
+	    	<label>이름</label>
+            <input name="mName" type="text" id="username"/>
+            <br />
+            
+            <label>생년월일</label>
+            <input name="mBirth" type="date" id="mBirth"/>
+            <br />
+            <div class="modal-body"></div>
+        <input type="button" id="findEmailBtn2" value="이메일 찾기">
+    </form>
+    <button id="closeModalBtn">닫기</button>
+  </div>
+</div>
+<div class="modal" id="pwModal">
+  <div class="modal-content">
+    <!-- 모달 내용을 추가할 수 있습니다. -->
+    <h2>비밀번호 찾기</h2>
+    <form action="/member/findPw" method="post" id="findPwForm">
+	    	<label>이름</label>
+            <input name="mName" type="text" id="username"/>
+            <br />
+            
+            <label>이메일</label>
+            <input name="mEmail" type="email" id="mEmail"/>
+            <br />
+            <div class="modal-body"></div>
+        <input type="button" id="findPwBtn2" value="비밀번호 찾기">
+    </form>
+    <button id="pwCloseModalBtn">닫기</button>
+  </div>
+</div>
+	
+
+
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="/assets/js/isotope.min.js"></script>
+  <script src="/assets/js/owl-carousel.js"></script>
+
+  <script src="/assets/js/tabs.js"></script>
+  <script src="/assets/js/popup.js"></script>
+  <script src="/assets/js/custom.js"></script>
+<!-- 로그인 실패 시 에러 알림 -->
+<!-- <script th:inline="javascript">
+    var loginError = [[${loginError}]] null;
+    if(loginError != null){
+    	alert(loginError);
+    }
+</script> -->
+  <!-- naverLogin -->
+  <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+  <script>
+  function checkForm() {
+      var email = document.getElementById('username').value;
+      var password = document.getElementById('password').value;
+
+      if (email.trim() === '' || password.trim() === '') {
+          alert('이메일과 비밀번호를 모두 입력해주세요.');
+          return false;
+      }
+
+  }
+
+  // 회원가입 버튼 클릭 시 이벤트 처리
+  $(document).ready(function () {
+      $('#signup-btn').click(function(){
+          location.href="/member/signup";
+      });
+  });
+  
+  // 네이버 로그인
+  var naver_id_login = new naver_id_login("6CLfLRb5CZQmn9V5zlLr", "http://localhost:8080/member/callback");
+  var state = naver_id_login.getUniqState();
+  naver_id_login.setButton("green", 3, 50);
+  naver_id_login.setDomain("http://localhost:8080");
+  naver_id_login.setState(state);
+  naver_id_login.setPopup();
+  naver_id_login.init_naver_id_login();
+  
+  $(document).ready(function() {
+	  // 이메일 찾기 버튼 클릭 시 모달 창 보이기
+	  $("#findEmailBtn").click(function() {
+	    // 모달 보이기
+	    $("#emailModal").css("display", "block");
+	  });
+	  $("#findPwBtn").click(function() {
+	    $("#pwModal").css("display", "block");
+	  });
+
+	  // 모달 창 바깥 클릭 시 모달 닫기
+	  $(window).click(function(event) {
+	    if (event.target === $("#emailModal")[0]) {
+	      $("#emailModal").css("display", "none");
+	    }
+	    if (event.target === $("#pwModal")[0]) {
+	      $("#pwModal").css("display", "none");
+	    }
+	  });
+
+	  // 모달 창 닫기 버튼 클릭 시 모달 닫기
+	  $("#closeModalBtn").click(function() {
+	    $("#emailModal").css("display", "none");
+	  });
+	  $("#pwCloseModalBtn").click(function() {
+	    $("#pwModal").css("display", "none");
+	  });
+	});
+  
+  $('#findEmailBtn2').click(function(){
+	  $.ajax({
+		url: "/member/findEmail",
+		type: "POST",
+		data: $("#findEmailForm").serialize(),
+		dataType: "text",
+		success: function(data){
+			alert('data - '+data);
+			if(data != null){
+				$('.modal-body').html(data);
+			}
+		},
+		error: function(xhr, status, error) {
+				$('.modal-body').html('일치하는 정보가 없습니다.');
+				console.log(error);
+			}
+	  });
+  });
+  $('#findPwBtn2').click(function(){
+	  $.ajax({
+		url: "/member/findPw",
+		type: "POST",
+		data: $("#findPwForm").serialize(),
+		dataType: "text",
+		success: function(data){
+			if(data != null){
+				$('.modal-body').html(data);
+			}
+		},
+		error: function(xhr, status, error) {
+				$('.modal-body').html('일치하는 정보가 없습니다.');
+				console.log(error);
+			}
+	  });
+  });
+
+</script>
+  </body>
+</html>
