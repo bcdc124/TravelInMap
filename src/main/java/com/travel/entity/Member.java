@@ -1,6 +1,8 @@
 package com.travel.entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,13 +45,13 @@ public class Member {
 	 @Column(name = "m_num")
 	 private Integer mNum;
 	 
-	 @Column(name = "m_email", nullable = false, unique = true)
+	 @Column(name = "m_email", unique = true)
 	 private String mEmail;
 	 
-	 @Column(name = "m_pw", nullable = false)
+	 @Column(name = "m_pw")
 	 private String mPw;
 	 
-	 @Column(name = "m_name", nullable = false)
+	 @Column(name = "m_name")
 	 private String mName;
 	 
 	 @Column(name ="m_gender")
@@ -65,11 +67,29 @@ public class Member {
 	 private String mNick;
 
 	 @Column(name = "m_point")
-	 private Integer mPoint;
+	 private int mPoint;
 	 
 	 @Column(name = "m_account")
 	 private String mAccount;
 	 
 	 @Column(name = "m_account_num")
 	 private String mAccount_num;
+	 
+	 @Column(name="m_regdate")
+	 private Timestamp mRegdate;
+	 
+	 @Column(name = "m_visit_cnt")
+	 private int mVisitCnt;
+	 
+	 @Column(name = "m_last_login_time")
+	    private LocalDateTime mLastLoginTime;
+	 
+	 // 방문수 증가
+	 public void incrementVisits() {
+		 if (mLastLoginTime == null || mLastLoginTime.toLocalDate().isBefore(LocalDateTime.now().toLocalDate())) {
+	            this.mVisitCnt++;
+	        }
+		 this.mLastLoginTime = LocalDateTime.now();
+	    }
+	 
 }

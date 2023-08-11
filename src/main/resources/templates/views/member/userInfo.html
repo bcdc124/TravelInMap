@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/mypage_layout}">
+<th:block layout:fragment="content">
+
+<body>
+<th:block layout:fragment="mypageContent">
+
+    		<div id="userInfo" class="container mt-4">
+		            <div class="user_register" style="display: block;">
+					    <form id="userUpdateForm" action="/member/userUpdate" method="post">
+					        <label>이름</label>
+					        <input name="mName" type="text" id="username" th:field="${member.mName}" readonly/>
+					
+					        <label>이메일</label>
+					        <input name="mEmail" type="email" id="email" th:field="${member.mEmail}" readonly/>
+							
+					        <label>비밀번호</label>
+					        <input name="mPw" type="password" id="password" placeholder="8~12자 영문 대 소문자, 숫자, 특수문자 조합"/>
+					        <div class="error-message" style="color: red;"></div>
+					        <div class="password-error" style="color: red;"></div>
+					
+					        <div class="checkbox">
+					            <label>성별</label>
+					            <input name="mGender" id="gender" type="radio" value="m" th:checked="${member.mGender == 'm' || member.mGender == 'M'}"/> 남자
+					            <input name="mGender" id="gender" type="radio" value="w" th:checked="${member.mGender == 'w' || member.mGender == 'W'}"/> 여자
+					            <input name="mGender" id="gender" type="radio" value="N" th:checked="${#strings.isEmpty(member.mGender) || member.mGender == 'N'}"/> 선택안함
+					            <div class="error-message" style="color: red;"></div>
+					        </div>
+					
+					      	<label>생년월일</label>
+					        <input name="mBirth" type="text" id="m_birth" th:field="${member.mBirth}" readonly>
+					        <div class="error-message" style="color: red;"></div>
+					
+					        <label>닉네임</label>
+					        <input name="mNick" type="text" id="m_nick" th:field="${member.mNick}">
+					
+					        <div class="action_btns">
+					            <div class="one_half last"><button type="submit" class="btn btn_red" id="submitButton">회원수정</button></div>
+					        </div>
+					    </form>
+					</div>
+		        </div>
+		        </th:block>
+<script>
+$(document).ready(function() {
+    var passwordError = true;
+
+    // 비밀번호 체크 함수
+    function isPasswordValid(password) {
+        // 8~12자 영문 대 소문자, 숫자, 특수문자 조합 정규식
+        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+        return passwordRegex.test(password);
+    }
+
+    // 비밀번호 입력 칸에서 벗어날 때 유효성 체크
+    $("#password").blur(function() {
+        var password = $(this).val().trim();
+        var errorMessage = $(".password-error");
+
+        if (!isPasswordValid(password)) {
+            // 유효하지 않은 비밀번호 형식인 경우
+            errorMessage.text("8~12자 영문 대 소문자, 숫자, 특수문자 조합이어야 합니다.");
+            passwordError = true;
+        } else {
+            // 유효한 비밀번호인 경우
+            errorMessage.empty();
+            passwordError = false;
+        }
+    });
+
+    $('#userUpdateForm').submit(function(event) {
+        if (passwordError) {
+            $("#password").next(".error-message").text("필수항목입니다");
+            event.preventDefault();
+        }
+
+        if ($("#gender:checked").length === 0) {
+            $("#gender").next(".error-message").text("필수항목입니다");
+            event.preventDefault();
+        }
+    });
+});
+
+</script>
+
+  </body>
+	  </th:block>
+</html>
