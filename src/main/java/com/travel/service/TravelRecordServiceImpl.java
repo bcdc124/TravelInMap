@@ -55,7 +55,7 @@ public class TravelRecordServiceImpl implements TravelRecordService {
 
 		TravelRecordEntity entity = trRepository.findById(t_num).orElseThrow(() ->new CustomException(ErrorCode.POSTS_NOT_FOUND));
 		
-		entity.update(trDTO.getT_num(),trDTO.getT_title(),trDTO.getM_num() ,trDTO.getT_postDate(),
+		entity.update(trDTO.getT_title(),trDTO.getM_num() ,trDTO.getT_postDate(),
 					trDTO.getT_content(),trDTO.getT_tag(),trDTO.getT_personnel(),trDTO.getT_save(),
 					trDTO.getT_startDay(),trDTO.getT_endDay(),trDTO.getT_theme());
 		

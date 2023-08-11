@@ -51,20 +51,19 @@ public class TravelRecordEntity {
      private char t_save;
      
      @Column(name = "t_startDay")
-     private LocalDate tStartDay;
+     private String tStartDay;
      
      @Column(name = "t_endDay")
-     private LocalDate tEndDay;
+     private String tEndDay;
      
      @Column(name = "t_theme")
      private String tTheme;
 	 
      @Builder
-     public TravelRecordEntity(long t_num, String t_title, int m_num, LocalDateTime t_postDate, int t_view,
+     public TravelRecordEntity(String t_title, int m_num, LocalDateTime t_postDate, int t_view,
              int t_great, String t_content, String t_tag, int t_personnel, char t_save,
-             LocalDate t_startDay, LocalDate t_endDay, String t_theme) {
+             String t_startDay, String t_endDay, String t_theme) {
   
-    	 this.tNum = t_num;
          this.tTitle = t_title;
          this.mNum = m_num;
          this.t_postDate = t_postDate;
@@ -80,9 +79,8 @@ public class TravelRecordEntity {
      }
 	    
 	    // 게시글 수정
-	    public void update(long t_num,String t_title,int m_num,LocalDateTime t_postDate,String t_content, String t_tag, int t_personnel, char t_save, 
-	    					LocalDate t_startDay, LocalDate t_endDay, String t_theme) {
-			this.tNum = t_num;
+	    public void update(String t_title,int m_num,LocalDateTime t_postDate,String t_content, String t_tag, int t_personnel, char t_save, 
+	    		String t_startDay, String t_endDay, String t_theme) {
 	    	this.tTitle = t_title;
 	    	this.mNum = m_num;
 	    	this.t_postDate = t_postDate;

@@ -27,7 +27,7 @@ public class TravelInMapApplicationTests {
 	@Test
 	void save() {
 		TravelRecordEntity params = TravelRecordEntity.builder()
-			    .t_num(1)
+//			    .t_num(1)
 			    .t_title("제목")
 			    .m_num(2)
 			    .t_postDate(LocalDateTime.now())
@@ -37,8 +37,8 @@ public class TravelInMapApplicationTests {
 			    .t_tag("태그")
 			    .t_personnel(3)
 			    .t_save('Y')
-			    .t_startDay(startDate)
-			    .t_endDay(endDate)
+//			    .t_startDay(startDate)
+//			    .t_endDay(endDate)
 			    .t_theme("여행 테마")
 			    .build();
 		
